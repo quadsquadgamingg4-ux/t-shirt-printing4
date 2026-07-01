@@ -206,8 +206,7 @@
 
         .product-price {
             font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--text-dark);
+            font-size: 1rem;
         }
 
         .buy-now-action {
@@ -328,7 +327,7 @@
 </head>
 <body>
 
-    <!-- Unified Navigation Bar -->
+    <!-- Updated Navigation with New Brand -->
     <nav>
         <div class="logo" onclick="showView('store-view')">✨ AYELA TRENDYYY</div>
         <div class="nav-buttons">
@@ -340,7 +339,7 @@
     <main id="store-view" class="view">
         <div class="hero-banner">
             <h1>AYELA TRENDYYY // DROP 01</h1>
-            <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 1rem;">100 exclusive street styles & oversized drops. All items at flat ₹500!</p>
+            <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 1rem;">100 exclusive street styles & oversized drops curated for you.</p>
             
             <!-- PHOTO ADDITION COMPONENT MODULE -->
             <div class="upload-section">
@@ -368,11 +367,11 @@
                 </div>
                 <div class="form-group">
                     <label>Mobile Phone Contact</label>
-                    <input type="tel" id="custPhone" required placeholder="+91 XXXXX-XXXXX">
+                    <input type="tel" id="custPhone" required placeholder="+91 XXXXX XXXXX">
                 </div>
                 <div class="form-group">
                     <label>Complete Shipping Address</label>
-                    <textarea id="custAddress" rows="3" required placeholder="Flat/House number, Street name, City, State, Pincode"></textarea>
+                    <textarea id="custAddress" rows="3" required placeholder="Flat/Suite number, Street name, City, State, Pincode"></textarea>
                 </div>
                 <button type="submit" class="submit-btn">Proceed To Payment</button>
             </form>
@@ -386,7 +385,7 @@
             <div style="border-left: 3px solid black; padding-left: 1rem; margin-bottom: 2rem;">
                 <p style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted);">Review Selected Drop</p>
                 <p><strong id="pay-item-label">Model SKU</strong></p>
-                <p><strong id="pay-price-label">₹500</strong></p>
+                <p><strong id="pay-price-label">₹0</strong></p>
             </div>
             <form id="payment-form" onsubmit="executeOrderPlacement(event)">
                 <div class="form-group">
@@ -445,7 +444,7 @@
                 <tbody id="admin-table-rows">
                     <tr id="empty-state-row">
                         <td colspan="5" style="text-align: center; padding: 4rem; color: var(--text-muted);">
-                            No transactions captured. Complete checkout as a customer to generate entries.
+                            No transactions captured. Complete checkout as a customer to generate operational entries.
                         </td>
                     </tr>
                 </tbody>
@@ -471,17 +470,17 @@
 
         const catalogGrid = document.getElementById('catalog-container');
 
-        // Fixed Price Parameter set explicitly to 500 Rupees 
-        const fixedInrPrice = "500";
-
         // Compile and append standard 100 trendy models onto grid layout viewport
         for (let i = 1; i <= 100; i++) {
             const finalStyle = urbanStyles[i % urbanStyles.length];
             const finalColor = colorways[i % colorways.length];
             const name = `AYELA Model #${i < 10 ? '0'+i : i} [${finalColor} ${finalStyle}]`;
+            // Convert USD to INR (1 USD ≈ 83 INR)
+            const priceUSD = (29.99 + ((i * 3) % 45)).toFixed(2);
+            const priceINR = Math.round(priceUSD * 83);
             const badgeTag = tags[i % tags.length];
             
-            // Generates clothing profile visuals using seed architecture
+            // Generates high-quality curated clothing profile visuals using seed architecture
             const itemPhotoUrl = `https://picsum.photos/seed/streetwearvibe${i}/400/500`;
 
             const cardNode = document.createElement('div');
@@ -493,9 +492,9 @@
                 </div>
                 <div class="product-meta">
                     <div class="product-title">${name}</div>
-                    <div class="product-price">₹${fixedInrPrice}</div>
+                    <div class="product-price">₹${priceINR}</div>
                 </div>
-                <button class="buy-now-action" onclick="initiateCheckoutFlow('${name}', '${fixedInrPrice}')">Buy Now</button>
+                <button class="buy-now-action" onclick="initiateCheckoutFlow('${name}', '${priceINR}')">Buy Now</button>
             `;
             catalogGrid.appendChild(cardNode);
         }
@@ -510,8 +509,9 @@
                 const customImgUrl = e.target.result;
                 const customModelCount = document.querySelectorAll('.product-card').length + 1;
                 const customName = `AYELA CUSTOM #${customModelCount} (${file.name.split('.')[0]})`;
+                const customPriceINR = "3735"; // 45 USD * 83 = 3735 INR
 
-                // Generate and prepend custom item card block into catalog layout grid matrix
+                // Generate and prepend item block safely to the top row layout
                 const customCardNode = document.createElement('div');
                 customCardNode.className = 'product-card';
                 customCardNode.innerHTML = `
@@ -521,9 +521,9 @@
                     </div>
                     <div class="product-meta">
                         <div class="product-title">${customName}</div>
-                        <div class="product-price">₹${fixedInrPrice}</div>
+                        <div class="product-price">₹${customPriceINR}</div>
                     </div>
-                    <button class="buy-now-action" style="background:#16a34a" onclick="initiateCheckoutFlow('${customName}', '${fixedInrPrice}')">Buy Custom Shirt</button>
+                    <button class="buy-now-action" style="background:#16a34a" onclick="initiateCheckoutFlow('${customName}', '${customPriceINR}')">Buy Custom Shirt</button>
                 `;
                 
                 catalogGrid.insertBefore(customCardNode, catalogGrid.firstChild);
