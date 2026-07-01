@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThreadCraft - T-Shirt Store</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --border: #e2e8f0;
+            --success: #16a34a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        .nav-buttons button {
+            background: none;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .nav-buttons button:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* View Containers */
+        .view {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Store View (100 T-shirts Grid) */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 6px;
+            background-color: #eee;
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+            margin: 0.75rem 0 0.25rem 0;
+        }
+
+        .product-price {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .buy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 0.6rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .buy-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        /* Forms Architecture (Checkout Steps) */
+        .form-card {
+            background: white;
+            max-width: 500px;
+            margin: 4rem auto;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
+        }
+
+        .form-card h2 {
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .submit-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+
+        /* Success Page */
+        .success-msg {
+            text-align: center;
+            padding: 3rem;
+        }
+        .success-msg h1 { color: var(--success); margin-bottom: 1rem; }
+
+        /* Admin Panel Dashboard */
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        .stats-counter {
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .orders-table th, .orders-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .orders-table th {
+            background-color: #f1f5f9;
+            font-weight: 600;
+        }
+
+        .orders-table tr:hover {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation Bar -->
+    <nav>
+        <div class="logo" onclick="showView('store-view')">👕 ThreadCraft</div>
+        <div class="nav-buttons">
+            <button onclick="showView('admin-view')">🔒 Admin Panel</button>
+        </div>
+    </nav>
+
+    <!-- VIEW 1: Store Catalog (100 Items) -->
+    <main id="store-view" class="view">
+        <h2 style="margin-bottom: 2rem;">Explore Our Collection (100 Unique Styles)</h2>
+        <div class="products-grid" id="products-container">
+            <!-- JavaScript dynamically inserts 100 items here -->
+        </div>
+    </main>
+
+    <!-- VIEW 2: Shipping Info Form -->
+    <section id="address-view" class="view hidden">
+        <div class="form-card">
+            <h2>📍 Shipping Information</h2>
+            <form id="address-form" onsubmit="handleAddressSubmit(event)">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" required placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" required placeholder="+1 (555) 000-0000">
+                </div>
+                <div class="form-group">
+                    <label for="address">Full Delivery Location Address</label>
+                    <textarea id="address" rows="3" required placeholder="Street address, City, State, ZIP"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Proceed to Payment →</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- VIEW 3: Billing & Payment Form -->
+    <section id="payment-view" class="view hidden">
+        <div class="form-card">
+            <h2>💳 Billing & Payment</h2>
+            <div style="background: #f1f5f9; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem;">
+                <p><strong>Item Selected:</strong> <span id="summary-item">T-Shirt</span></p>
+                <p><strong>Total to Pay:</strong> <span id="summary-price">$19.99</span></p>
+            </div>
+            <form id="payment-form" onsubmit="handlePaymentSubmit(event)">
+                <div class="form-group">
+                    <label for="cardName">Name on Card</label>
+                    <input type="text" id="cardName" required>
+                </div>
+                <div class="form-group">
+                    <label for="cardNumber">Card Number</label>
+                    <input type="text" id="cardNumber" placeholder="1234 5678 9101 1121" max-length="16" required>
+                </div>
+                <div class="form-row" style="display: flex; gap: 1rem;">
+                    <div class="form-group" style="flex: 2;">
+                        <label for="exp">Expiry Date</label>
+                        <input type="text" id="exp" placeholder="MM/YY" required>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label for="cvv">CVV</label>
+                        <input type="text" id="cvv" placeholder="123" required>
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn">Place Order Now ($)</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- VIEW 4: Order Confirmation Success -->
+    <section id="success-view" class="view hidden">
+        <div class="form-card success-msg">
+            <h1>🎉 Order Placed!</h1>
+            <p>Your order has been received successfully and is being routed to our distribution center.</p>
+            <button class="buy-btn" style="margin-top: 2rem; width: auto; padding: 0.75rem 2rem;" onclick="showView('store-view')">Continue Shopping</button>
+        </div>
+    </section>
+
+    <!-- VIEW 5: Admin Panel View -->
+    <section id="admin-view" class="view hidden">
+        <div class="admin-header">
+            <div>
+                <h2>🛡️ Live Admin Dashboard</h2>
+                <p>Manage, view, and organize your incoming real-time requests.</p>
+            </div>
+            <div class="stats-counter">Total Received Orders: <span id="order-count">0</span></div>
+        </div>
+
+        <table class="orders-table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Item Ordered</th>
+                    <th>Customer Name</th>
+                    <th>Phone Contact</th>
+                    <th>Delivery Destination Location</th>
+                </tr>
+            </thead>
+            <tbody id="admin-orders-rows">
+                <!-- Live order rows injected dynamically here -->
+                <tr id="no-orders-row">
+                    <td colspan="5" style="text-align: center; color: #64748b; padding: 3rem;">No orders placed yet. Live customer checkouts will appear here instantly.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- App Logic Engine Control System -->
+    <script>
+        // Global variables state storage mock architecture
+        let currentSelectedProduct = null;
+        let checkoutData = {};
+        let ordersDatabase = [];
+        let orderIdCounter = 1001;
+
+        // 1. Generate 100 T-Shirt Models Programmatically with curated placeholder images
+        const colors = ['Crimson Red', 'Navy Blue', 'Classic Black', 'Vintage White', 'Olive Green', 'Charcoal Grey', 'Mustard Yellow', 'Forest Green'];
+        const designs = ['Minimalist Graphic', 'Urban Streetwear', 'Classic Crewneck', 'Vintage Acid Wash', 'Sport Performance', 'Retro Emblem'];
+        
+        const container = document.getElementById('products-container');
+        
+        for (let i = 1; i <= 100; i++) {
+            const randomColor = colors[i % colors.length];
+            const randomDesign = designs[i % designs.length];
+            const name = `Model #${i} - ${randomColor} ${randomDesign}`;
+            const price = (14.99 + (i % 15)).toFixed(2);
+            
+            // Uses systematically configured mock asset image generator index models 
+            const imageUrl = `https://picsum.photos/seed/tshirt${i}/300/350`;
+
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.innerHTML = `
+                <img src="${imageUrl}" alt="${name}" class="product-image" loading="lazy">
+                <h3 class="product-title">${name}</h3>
+                <div class="product-price">$${price}</div>
+                <button class="buy-btn" onclick="startCheckout('${name}', '${price}')">Buy Now</button>
+            `;
+            container.appendChild(card);
+        }
+
+        // 2. View Switching Controller Functions
+        function showView(viewId) {
+            document.querySelectorAll('.view').forEach(view => {
+                view.classList.add('hidden');
+            });
+            document.getElementById(viewId).classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        // 3. Checkout Pipeline Processing Logic
+        function startCheckout(name, price) {
+            currentSelectedProduct = { name, price };
+            showView('address-view');
+        }
+
+        function handleAddressSubmit(event) {
+            event.preventDefault();
+            checkoutData.fullName = document.getElementById('fullName').value;
+            checkoutData.phone = document.getElementById('phone').value;
+            checkoutData.address = document.getElementById('address').value;
+
+            // Prepare summary labels for payment confirmation step
+            document.getElementById('summary-item').innerText = currentSelectedProduct.name;
+            document.getElementById('summary-price').innerText = `$${currentSelectedProduct.price}`;
+
+            showView('payment-view');
+        }
+
+        function handlePaymentSubmit(event) {
+            event.preventDefault();
+            
+            // Build the unified Order payload object
+            const finalOrder = {
+                id: orderIdCounter++,
+                item: currentSelectedProduct.name,
+                customer: checkoutData.fullName,
+                phone: checkoutData.phone,
+                deliveryLocation: checkoutData.address
+            };
+
+            // Push object to operational data arrays
+            ordersDatabase.push(finalOrder);
+            updateAdminPanel();
+
+            // Clear input fields
+            document.getElementById('address-form').reset();
+            document.getElementById('payment-form').reset();
+
+            showView('success-view');
+        }
+
+        // 4. Admin Management Dashboard Engine
+        function updateAdminPanel() {
+            const tbody = document.getElementById('admin-orders-rows');
+            const noOrdersRow = document.getElementById('no-orders-row');
+            
+            if(noOrdersRow) {
+                noOrdersRow.remove();
+            }
+
+            // Target state parameters elements counter update
+            document.getElementById('order-count').innerText = ordersDatabase.length;
+
+            // Render modern list components inside dashboard structure
+            tbody.innerHTML = ""; 
+            ordersDatabase.forEach(order => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>#${order.id}</strong></td>
+                    <td>${order.item}</td>
+                    <td>${order.customer}</td>
+                    <td>${order.phone}</td>
+                    <td><span style="font-size:0.9rem; color:#475569;">${order.deliveryLocation}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+    </script>
+</body>
+</html>
