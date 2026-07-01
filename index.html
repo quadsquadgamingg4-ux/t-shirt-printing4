@@ -76,6 +76,83 @@
             display: none !important;
         }
 
+        /* Login Form Styles */
+        .login-container {
+            max-width: 400px;
+            margin: 5rem auto;
+            padding: 2.5rem;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .login-container h1 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .login-container p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-dark);
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #cccccc;
+            font-size: 0.95rem;
+            transition: border 0.2s;
+            border-radius: 4px;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .login-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 1rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-top: 1rem;
+            border-radius: 4px;
+        }
+
+        .login-btn:hover {
+            background: #222;
+        }
+
+        .error-msg {
+            color: #ff3e3e;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
         /* Trendy Banner & Upload Widget Zone */
         .hero-banner {
             background: #f0f0f0;
@@ -121,6 +198,7 @@
             padding: 0.5rem 1.5rem;
             font-weight: bold;
             cursor: pointer;
+            border-radius: 4px;
         }
 
         .upload-section input[type=file] {
@@ -221,6 +299,7 @@
             text-transform: uppercase;
             cursor: pointer;
             transition: background 0.2s;
+            border-radius: 4px;
         }
 
         .buy-now-action:hover {
@@ -234,6 +313,7 @@
             margin: 3rem auto;
             padding: 2.5rem;
             border: 1px solid var(--border-color);
+            border-radius: 8px;
         }
 
         .form-card h2 {
@@ -242,32 +322,6 @@
             margin-bottom: 1.5rem;
             text-transform: uppercase;
             letter-spacing: -0.5px;
-        }
-
-        .form-group {
-            margin-bottom: 1.25rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.4rem;
-            font-size: 0.8rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: var(--text-dark);
-        }
-
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #cccccc;
-            font-size: 0.95rem;
-            transition: border 0.2s;
-        }
-
-        .form-group input:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
         }
 
         .submit-btn {
@@ -282,6 +336,7 @@
             letter-spacing: 1px;
             cursor: pointer;
             margin-top: 0.5rem;
+            border-radius: 4px;
         }
 
         /* Admin Management Framework */
@@ -302,11 +357,16 @@
             padding: 0.6rem 1.2rem;
             font-weight: 700;
             font-size: 0.9rem;
+            border-radius: 4px;
         }
 
         .admin-table {
             width: 100%;
             border-collapse: collapse;
+            background: white;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .admin-table th, .admin-table td {
@@ -324,9 +384,26 @@
             letter-spacing: 0.5px;
         }
 
+        .shipped-btn {
+            background: #16a34a;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .shipped-btn:hover {
+            background: #15803d;
+        }
+
         .admin-upload-section {
             background: white;
-            max-width: 500px;
+            max-width: 100%;
             margin: 0 0 3rem 0;
             padding: 1.5rem;
             border: 2px dashed #cccccc;
@@ -346,6 +423,24 @@
             margin-bottom: 0.75rem;
             font-weight: 500;
         }
+
+        .logout-btn {
+            background: #ff3e3e;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: opacity 0.2s;
+            border-radius: 4px;
+        }
+
+        .logout-btn:hover {
+            opacity: 0.8;
+        }
     </style>
 </head>
 <body>
@@ -357,6 +452,26 @@
             <button onclick="showView('admin-view')">Admin Panel</button>
         </div>
     </nav>
+
+    <!-- VIEW 0: Admin Login -->
+    <section id="login-view" class="view hidden">
+        <div class="login-container">
+            <h1>🔒 Admin Login</h1>
+            <p>Enter your credentials to access the admin panel</p>
+            <form onsubmit="handleAdminLogin(event)">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="admin-email" required placeholder="rajumanish25@gmail.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="admin-password" required placeholder="••••••••">
+                </div>
+                <div class="error-msg" id="login-error">Invalid credentials. Please try again.</div>
+                <button type="submit" class="login-btn">Login to Admin Panel</button>
+            </form>
+        </div>
+    </section>
 
     <!-- VIEW 1: Main Catalog -->
     <main id="store-view" class="view">
@@ -442,7 +557,10 @@
                     <h2 style="font-size: 1.8rem; font-weight: 900;">AYELA TRENDYYY // ADMIN PANEL</h2>
                     <p style="color: var(--text-muted);">Incoming order feeds and logistics destination mappings.</p>
                 </div>
-                <div class="counter-pill">Total Active Orders: <span id="orders-qty">0</span></div>
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <div class="counter-pill">Total Active Orders: <span id="orders-qty">0</span></div>
+                    <button class="logout-btn" onclick="handleLogout()">Logout</button>
+                </div>
             </div>
 
             <!-- ADMIN UPLOAD SECTION -->
@@ -463,11 +581,12 @@
                         <th>Receiver Client</th>
                         <th>Phone Number</th>
                         <th>Delivery Destination Location</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody id="admin-table-rows">
                     <tr id="empty-state-row">
-                        <td colspan="5" style="text-align: center; padding: 4rem; color: var(--text-muted);">
+                        <td colspan="6" style="text-align: center; padding: 4rem; color: var(--text-muted);">
                             No transactions captured. Complete checkout as a customer to generate operational entries.
                         </td>
                     </tr>
@@ -482,6 +601,11 @@
         let customerAddressData = {};
         const globalOrdersLog = [];
         let runningIdCounter = 8801;
+        let isAdminLoggedIn = false;
+
+        // Admin credentials
+        const ADMIN_EMAIL = "rajumanish25@gmail.com";
+        const ADMIN_PASSWORD = "GOVman@2410";
 
         // Core compilation generator configured to fit Ayela Trendyyy's look
         const urbanStyles = [
@@ -499,12 +623,10 @@
             const finalStyle = urbanStyles[i % urbanStyles.length];
             const finalColor = colorways[i % colorways.length];
             const name = `AYELA Model #${i < 10 ? '0'+i : i} [${finalColor} ${finalStyle}]`;
-            // Convert USD to INR (1 USD ≈ 83 INR)
             const priceUSD = (29.99 + ((i * 3) % 45)).toFixed(2);
             const priceINR = Math.round(priceUSD * 83);
             const badgeTag = tags[i % tags.length];
             
-            // Generates high-quality curated clothing profile visuals using seed architecture
             const itemPhotoUrl = `https://picsum.photos/seed/streetwearvibe${i}/400/500`;
 
             const cardNode = document.createElement('div');
@@ -523,8 +645,36 @@
             catalogGrid.appendChild(cardNode);
         }
 
+        // Admin login handler
+        function handleAdminLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+
+            if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+                isAdminLoggedIn = true;
+                document.getElementById('login-error').style.display = 'none';
+                showView('admin-view');
+            } else {
+                document.getElementById('login-error').style.display = 'block';
+            }
+        }
+
+        // Logout handler
+        function handleLogout() {
+            isAdminLoggedIn = false;
+            document.getElementById('admin-email').value = '';
+            document.getElementById('admin-password').value = '';
+            showView('store-view');
+        }
+
         // PHOTO UPLOADER: Adds user custom photo design inside store catalog instantly
         function processCustomPhotoUpload(event) {
+            if (!isAdminLoggedIn) {
+                alert("Please login to upload designs");
+                return;
+            }
+
             const file = event.target.files[0];
             if (!file) return;
 
@@ -533,9 +683,8 @@
                 const customImgUrl = e.target.result;
                 const customModelCount = document.querySelectorAll('.product-card').length + 1;
                 const customName = `AYELA CUSTOM #${customModelCount} (${file.name.split('.')[0]})`;
-                const customPriceINR = "3735"; // 45 USD * 83 = 3735 INR
+                const customPriceINR = "3735";
 
-                // Generate and prepend item block safely to the top row layout
                 const customCardNode = document.createElement('div');
                 customCardNode.className = 'product-card';
                 customCardNode.innerHTML = `
@@ -553,7 +702,6 @@
                 catalogGrid.insertBefore(customCardNode, catalogGrid.firstChild);
                 alert("Success! Your custom photo design has been added to the store catalog grid layout matrix.");
                 
-                // Switch to store view to see the new product
                 showView('store-view');
                 window.scrollTo({ top: catalogGrid.offsetTop - 100, behavior: 'smooth' });
             };
@@ -564,6 +712,13 @@
         function showView(viewId) {
             document.querySelectorAll('.view').forEach(elem => elem.classList.add('hidden'));
             document.getElementById(viewId).classList.remove('hidden');
+            
+            // Check admin auth
+            if (viewId === 'admin-view' && !isAdminLoggedIn) {
+                document.getElementById('admin-view').classList.add('hidden');
+                showView('login-view');
+            }
+            
             window.scrollTo(0, 0);
         }
 
@@ -604,27 +759,47 @@
             showView('success-view');
         }
 
+        // Mark order as shipped
+        function markAsShipped(orderId) {
+            const index = globalOrdersLog.findIndex(order => order.id === orderId);
+            if (index > -1) {
+                globalOrdersLog.splice(index, 1);
+                refreshAdminModule();
+            }
+        }
+
         // Live Administrative Panel Interface Data Synchronization Processor
         function refreshAdminModule() {
             const tableBody = document.getElementById('admin-table-rows');
             const emptyPlaceholder = document.getElementById('empty-state-row');
 
-            if (emptyPlaceholder) emptyPlaceholder.remove();
+            if (emptyPlaceholder && globalOrdersLog.length > 0) {
+                emptyPlaceholder.remove();
+            }
 
             document.getElementById('orders-qty').innerText = globalOrdersLog.length;
             tableBody.innerHTML = "";
 
-            globalOrdersLog.forEach(data => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><strong>#${data.id}</strong></td>
-                    <td><span style="font-weight:600;">${data.itemName}</span></td>
-                    <td>${data.customer}</td>
-                    <td><code>${data.phone}</code></td>
-                    <td style="color:#444; font-size:0.85rem;">${data.location}</td>
-                `;
-                tableBody.appendChild(tr);
-            });
+            if (globalOrdersLog.length === 0) {
+                tableBody.innerHTML = `<tr id="empty-state-row">
+                    <td colspan="6" style="text-align: center; padding: 4rem; color: var(--text-muted);">
+                        No transactions captured. Complete checkout as a customer to generate operational entries.
+                    </td>
+                </tr>`;
+            } else {
+                globalOrdersLog.forEach(data => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><strong>#${data.id}</strong></td>
+                        <td><span style="font-weight:600;">${data.itemName}</span></td>
+                        <td>${data.customer}</td>
+                        <td><code>${data.phone}</code></td>
+                        <td style="color:#444; font-size:0.85rem;">${data.location}</td>
+                        <td><button class="shipped-btn" onclick="markAsShipped(${data.id})">Shipped</button></td>
+                    `;
+                    tableBody.appendChild(tr);
+                });
+            }
         }
     </script>
 </body>
