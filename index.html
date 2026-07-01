@@ -323,6 +323,29 @@
             font-weight: 700;
             letter-spacing: 0.5px;
         }
+
+        .admin-upload-section {
+            background: white;
+            max-width: 500px;
+            margin: 0 0 3rem 0;
+            padding: 1.5rem;
+            border: 2px dashed #cccccc;
+            border-radius: 6px;
+        }
+
+        .admin-upload-section h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .admin-upload-section p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
@@ -335,20 +358,11 @@
         </div>
     </nav>
 
-    <!-- VIEW 1: Main Catalog & Image Upload Workspace -->
+    <!-- VIEW 1: Main Catalog -->
     <main id="store-view" class="view">
         <div class="hero-banner">
             <h1>AYELA TRENDYYY // DROP 01</h1>
             <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 1rem;">100 exclusive street styles & oversized drops curated for you.</p>
-            
-            <!-- PHOTO ADDITION COMPONENT MODULE -->
-            <div class="upload-section">
-                <p>💡 Have your own look? Add your custom shirt style model instantly:</p>
-                <div class="upload-btn-wrapper">
-                    <button class="btn-upload">Choose Photo / Image</button>
-                    <input type="file" id="tshirt-photo-uploader" accept="image/*" onchange="processCustomPhotoUpload(event)" />
-                </div>
-            </div>
         </div>
 
         <div class="products-grid" id="catalog-container">
@@ -429,6 +443,16 @@
                     <p style="color: var(--text-muted);">Incoming order feeds and logistics destination mappings.</p>
                 </div>
                 <div class="counter-pill">Total Active Orders: <span id="orders-qty">0</span></div>
+            </div>
+
+            <!-- ADMIN UPLOAD SECTION -->
+            <div class="admin-upload-section">
+                <h3>📸 Add Custom Design to Catalog</h3>
+                <p>💡 Upload your custom shirt design to add it to the store catalog:</p>
+                <div class="upload-btn-wrapper">
+                    <button class="btn-upload">Choose Photo / Image</button>
+                    <input type="file" id="tshirt-photo-uploader" accept="image/*" onchange="processCustomPhotoUpload(event)" />
+                </div>
             </div>
 
             <table class="admin-table">
@@ -528,6 +552,9 @@
                 
                 catalogGrid.insertBefore(customCardNode, catalogGrid.firstChild);
                 alert("Success! Your custom photo design has been added to the store catalog grid layout matrix.");
+                
+                // Switch to store view to see the new product
+                showView('store-view');
                 window.scrollTo({ top: catalogGrid.offsetTop - 100, behavior: 'smooth' });
             };
             reader.readAsDataURL(file);
